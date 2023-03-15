@@ -14,13 +14,15 @@ devise_for :admin, skip: [:registrations, :passwords] ,controllers: {
 }
 
 
-#get 'fishes/new'
-
-resources :users, only: [ :create, :index, :show, :edit, :destroy, :update]
-
+  resources :users, only: [ :create, :index, :show, :edit, :destroy, :update]
+  resources :posts, only: [:new, :create, :index, :show, :destroy] do
+  resources :comments, only: [:create, :destroy]
+  end
+  
   scope module: :public do
    root to: 'homes#top'
-   get "/about"=>"homes#about"
+   resources :posts
+   
   end
    
     namespace :admin do
