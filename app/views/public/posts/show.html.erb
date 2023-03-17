@@ -1,26 +1,45 @@
 <h1>魚詳細</h1>
 
 <h2>title</h2>
-<p><%= @fish.title %></p>
+<p><%= @post.title %></p>
 
 <h2>text</h2>
-<p><%= @fish.text %></p>
+<p><%= @post.text %></p>
   
 <h2>fish</h2>
-<p><%= image_tag @fish.image ,size:'500x500'%></p>
+<p><%= image_tag @post.image ,size:'500x500'%></p>
 
 
 <div>
   <p>コメント件数：<%= @post.comments.count %></p>
   <% @post.comments.each do |comment| %>
-    <p><%= image_tag comment.user.get_profile_image(100,100) %></p>
-    <%= comment.user.name %>
-    <%= comment.created_at.strftime('%Y/%m/%d') %><%= comment.comment %>
+    <!--<p><%#= image_tag comment.user.get_profile_image(100,100) %></p>-->
+    <%= comment.user.username %>
+    <%= comment.created_at.strftime('%Y/%m/%d') %>
+    <%= comment.comments %>
+    <% if comment.user == current_user %>
+      <%= link_to "削除", post_comment_path(@post, comment), method: :delete %>
+    <% end %>
+    
+      <%# if @post.liked_by?(current_user) %>
+      <% if liked.user == current_user %>
+      <p>
+        <%= link_to post_likes_path(@post), method: :delete do %>
+          ♥<%= @post.likes.count %> いいね
+        <% end %>
+      </p>
+      <% else %>
+      <p>
+        <%= link_to post_likes_path(@post), method: :post do %>
+          ♡<%= @post.likes.count %> いいね
+        <% end %>
+      </p>
+   <% end %>
   <% end %>
 </div>
 <div>
   <%= form_with model: [@post, @comment] do |f| %>
-    <%= f.text_area :comment, rows: '5', placeholder: "コメントをここに" %>
+    <%= f.text_area :comments, rows: '5', placeholder: "コメントをここに" %>
     <%= f.submit "送信する" %>
   <% end %>
 </div>

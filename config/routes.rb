@@ -15,13 +15,16 @@ devise_for :admin, skip: [:registrations, :passwords] ,controllers: {
 
 
   resources :users, only: [ :create, :index, :show, :edit, :destroy, :update]
-  resources :posts, only: [:new, :create, :index, :show, :destroy] do
-  resources :comments, only: [:create, :destroy]
-  end
+  
   
   scope module: :public do
    root to: 'homes#top'
-   resources :posts
+   #resources :posts
+   resources :posts, only: [:new, :create, :index, :show, :destroy] do
+   resources :comments, only: [:create, :destroy]
+   resource :likes, only: [:create, :destroy]
+  
+  end
    
   end
    

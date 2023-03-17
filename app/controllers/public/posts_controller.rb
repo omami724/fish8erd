@@ -24,12 +24,14 @@ class Public::PostsController < ApplicationController
   end
   
   def show
-    @fish = Post.find(params[:id])
+    @post = Post.find(params[:id])
     @image = Postandtag.new
     @comment = Comment.new
   end
   
   def destroy
+    Comment.find(params[:id]).destroy
+    redirect_to post_path(params[:post_id])
   end
   
   def edit
