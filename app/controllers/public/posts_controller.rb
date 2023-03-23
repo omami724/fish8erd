@@ -7,10 +7,13 @@ class Public::PostsController < ApplicationController
   def index
    @fish = Post.new
    @fishes = Post.all
+   @posts = Post.page(params[:page])
+   
   end
   
   def create
     @fish = Post.new(fish_params)
+    @fish.user_id = current_user.id
     
     if @fish.save
     #redirect_to '/top'
@@ -35,6 +38,9 @@ class Public::PostsController < ApplicationController
   end
   
   def edit
+   @post = Post.find(params[:id])
+   #@user = @book.user
+   @fishes = Post.all
   end
 
   def update

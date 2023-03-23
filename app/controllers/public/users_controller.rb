@@ -1,7 +1,15 @@
 class Public::UsersController < ApplicationController
   
+  def guest_sign_in
+    user = User.guest
+    sign_in user
+    redirect_to posts_path, notice: 'ゲストユーザーとしてログインしました。'
+  end
+  
   def show
     @user = User.find(current_user.id)
+    @post = @user.post.page(params[:page])
+    @users = User.all
   end
 
   def edit
@@ -27,6 +35,9 @@ class Public::UsersController < ApplicationController
     reset_session
     redirect_to root_path
   end
-
   
+  def index
+    @users = User.all
+  end
+
 end

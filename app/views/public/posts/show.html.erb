@@ -1,14 +1,30 @@
 <h1>魚詳細</h1>
+<p><h5>&nbsp;&nbsp;<i class="far fa-compass" style="color: #4169e1;"></i>&nbsp;：<%= @post.title %></p></h5>
 
-<h2>title</h2>
-<p><%= @post.title %></p>
-
-<h2>text</h2>
-<p><%= @post.text %></p>
+<p><h5>&nbsp;&nbsp;<i class="fas fa-map-pin" style="color: #dc143c;"></i>&nbsp;&nbsp;：<%= @post.text %></p></h5>
   
 <h2>fish</h2>
 <p><%= image_tag @post.image ,size:'500x500'%></p>
 
+<% if @post.user_id == current_user.id %>
+  <td><%= link_to "Edit", edit_post_path(@post), class:"btn btn-success"%></td>
+  <td><%= link_to "Destroy", post_path(@post), method: :delete, data: {confirm: "本当に消しますか？"}, class:"btn btn-danger" %></td>
+<% end %>
+          
+
+  <% if @post.liked_by?(current_user) %>
+    <p>
+      <%= link_to post_likes_path(@post), method: :delete do %>
+        ♥<%= @post.likes.count %> いいね
+      <% end %>
+    </p>
+  <% else %>
+      <p>
+      <%= link_to post_likes_path(@post), method: :post do %>
+        ♡<%= @post.likes.count %> いいね
+      <% end %>
+      </p>
+   <% end %>
 
 <div>
   <p>コメント件数：<%= @post.comments.count %></p>
@@ -20,21 +36,6 @@
     <% if comment.user == current_user %>
       <%= link_to "削除", post_comment_path(@post, comment), method: :delete %>
     <% end %>
-    
-      <%# if @post.liked_by?(current_user) %>
-      <% if liked.user == current_user %>
-      <p>
-        <%= link_to post_likes_path(@post), method: :delete do %>
-          ♥<%= @post.likes.count %> いいね
-        <% end %>
-      </p>
-      <% else %>
-      <p>
-        <%= link_to post_likes_path(@post), method: :post do %>
-          ♡<%= @post.likes.count %> いいね
-        <% end %>
-      </p>
-   <% end %>
   <% end %>
 </div>
 <div>

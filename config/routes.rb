@@ -12,15 +12,25 @@ devise_for :users,skip: [:passwords], controllers: {
 devise_for :admin, skip: [:registrations, :passwords] ,controllers: {
   sessions: "admin/sessions"
 }
+ 
 
-
-  resources :users, only: [ :create, :index, :show, :edit, :destroy, :update]
-  
   
   scope module: :public do
-   root to: 'homes#top'
-   #resources :posts
-   resources :posts, only: [:new, :create, :index, :show, :destroy] do
+   # ゲストログイン用
+  resources :users, only: [ :create, :index, :show, :edit, :destroy, :update] do
+  resources :followers,only: [:index,:create, :destroy]
+  end
+  
+   post 'users/guest_sign_in', to: 'users#guest_sign_in'
+   get "/about" => "homes#about", as: "about"
+    root to: 'homes#top'
+   get "search" => "searches#search"
+   
+   
+   get "/followers/following"=> "followers#followings"
+   get "/followers/followed"=> "followers#followed"
+   
+   resources :posts, only: [:new, :create, :edit, :index, :show, :destroy] do
    resources :comments, only: [:create, :destroy]
    resource :likes, only: [:create, :destroy]
   
