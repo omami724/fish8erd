@@ -19,4 +19,18 @@ class Post < ApplicationRecord
     likes.exists?(user_id: user&.id)
   end
   
+  def self.looks(search, word)
+      if search == "perfect_match"
+        @posts = Post.where("title LIKE?","#{word}")
+      elsif search == "forward_match"
+        @posts = Post.where("title LIKE?","#{word}%")
+      elsif search == "backward_match"
+        @posts = Post.where("title LIKE?","%#{word}")
+      elsif search == "partial_match"
+        @posts = Post.where("title LIKE?","%#{word}%")
+      else
+        @posts = Post.all
+      end
+  end
+  
 end

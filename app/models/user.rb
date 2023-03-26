@@ -1,8 +1,10 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  has_many :followings, through: :relationships, source: :followed
-  has_many :followers, through: :reverse_of_relationships, source: :follower
+  has_many :followers, class_name: "Follower", foreign_key: "following_id", dependent: :destroy
+  has_many :reverse_of_followers, class_name: "Follower", foreign_key: "followed_id", dependent: :destroy
+  has_many :followings, through: :followers, source: :followed
+  has_many :followereds, through: :reverse_of_followers, source: :follower
   has_many :comments, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -21,9 +23,32 @@ class User < ApplicationRecord
     end
   end
   
-  def following?(user)
     
-  end
+    def follow(user_id)
+      followers.create(followed_id: user_id)
+    end
+  
+    def unfollow(user_id)
+      followers.find_by(followed_id: user_id).destroy
+    end
+  
+    def following?(user)
+      followings.include?(user)
+    end
+    
+    def self.looks(search, word)
+      if search == "perfect_match"
+        @user = User.where("username LIKE?", "#{word}")
+      elsif search == "forward_match"
+        @user = User.where("username LIKE?","#{word}%")
+      elsif search == "backward_match"
+        @user = User.where("username LIKE?","%#{word}")
+      elsif search == "partial_match"
+        @user = User.where("username LIKE?","%#{word}%")
+      else
+        @user = User.all
+      end
+    end
 
   with_options presence: true do
   validates :username

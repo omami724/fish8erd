@@ -6,9 +6,7 @@ class Public::PostsController < ApplicationController
 
   def index
    @fish = Post.new
-   @fishes = Post.all
-   @posts = Post.page(params[:page])
-   
+   @fishes = Post.all.page(params[:page])
   end
   
   def create
@@ -21,7 +19,7 @@ class Public::PostsController < ApplicationController
       redirect_to post_path(@fish)
     else
       @user = current_user
-      @fishes = Post.all
+      @fishes = Post.all.page(params[:page])
       render :index
     end
   end
@@ -33,8 +31,8 @@ class Public::PostsController < ApplicationController
   end
   
   def destroy
-    Comment.find(params[:id]).destroy
-    redirect_to post_path(params[:post_id])
+    Post.find(params[:id]).destroy
+    redirect_to posts_path
   end
   
   def edit
@@ -44,6 +42,9 @@ class Public::PostsController < ApplicationController
   end
 
   def update
+   @post = Post.find(params[:id])
+   @post.update(fish_params)
+   redirect_to post_path(@post)
   end
   
   private

@@ -3,17 +3,25 @@
 <table class='table'>
   <thead>
     <tr>
-      <th colspan="3">
+      <th>user name</th>
+      <th>fish name</th>
+      <th>shooting location</th>
+      <th>photo</th>
+      <th colspan="4">
       </th>
     </tr>
   </thead>
   
   <tbody>
-   <% @posts.each do |fish| %>    
+   <% @fishes.each do |fish| %>    
       <tr>
-      <td><%= fish.title %></td>
-      <td><%= fish.text %></td>
-      <td><%= image_tag fish.image, size:'100x100'%></td>
+        <td><%= fish.user.username %></td>
+        <td><%= fish.title %></td>
+        <td><%= fish.text %></td>
+        <td><%= link_to post_path(fish.id) do %>
+            <%= image_tag fish.image, size:'100x100'%>
+            <% end %>
+        </td>
       </tr>
    <% end %>
    </tbody>
@@ -22,4 +30,4 @@
 </table>
     
 
-  <%= paginate @posts %>
+  <%= paginate @fishes %>

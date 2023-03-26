@@ -7,13 +7,17 @@ class Public::UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(current_user.id)
-    @post = @user.post.page(params[:page])
     @users = User.all
+    @user = User.find(params[:id])
+    @posts = @user.posts
+    @post = @user.posts.build
   end
 
   def edit
-    @user = User.find(current_user.id)
+    @user = User.find(params[:id])
+    unless current_user.id == @user.id
+      redirect_to user_path(@user)
+    end 
   end
 
   def update
