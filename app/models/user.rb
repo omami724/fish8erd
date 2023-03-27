@@ -11,6 +11,11 @@ class User < ApplicationRecord
   
   has_one_attached :profile_image
   
+  with_options presence: true do
+    validates :username
+    validates :email
+    #validates :password
+  end
   
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
@@ -50,9 +55,6 @@ class User < ApplicationRecord
       end
     end
 
-  with_options presence: true do
-  validates :username
-  validates :email
-  validates :password
-  end
+  
+
 end
