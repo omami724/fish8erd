@@ -29,6 +29,13 @@
       <%=link_to user_path(current_user.id),class: 'nav-link text-white' do%>
      <i class="fas fa-home"></i> Home
      <%end%>
+     
+     <li>
+      <%=link_to about_path,class: 'nav-link text-white' do%>
+      <i class="fas fa-link"></i> About
+      <%end%>
+    </li>
+    
     <li>
       <%=link_to users_path,class: 'nav-link text-white' do%>
       <i class="fas fa-users"></i> Users

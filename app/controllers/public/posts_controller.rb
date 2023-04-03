@@ -13,6 +13,9 @@ class Public::PostsController < ApplicationController
     @fish = Post.new(fish_params)
     @fish.user_id = current_user.id
     
+    tags = Vision.get_image_data(fish_params[:image]) # ファイルを保存する前にVisionAPIにタグを生成せる。
+    @fish.save_tags(tags.split(',').join(' '))
+    
     if @fish.save
     #redirect_to '/top'
     flash[:notice]="You have creatad fish successfully."
@@ -44,6 +47,9 @@ class Public::PostsController < ApplicationController
   def update
    @post = Post.find(params[:id])
    @post.update(fish_params)
+  # 画像変更できるようになったときに有効化する
+  # tags = Vision.get_image_data(fish_params[:image])
+  # @post.save_tags(tags.split(',').join(' '))
    redirect_to post_path(@post)
   end
   
